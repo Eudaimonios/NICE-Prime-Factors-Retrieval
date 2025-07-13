@@ -21,7 +21,8 @@
 <body>
   <h1>NICE Prime-Factorization Challenge</h1>
 
-  <p><strong>About:</strong> Originally proposed by Rodriguez ~20 years ago as a method to test for nonlocal intelligence through prime factorization. Inspired by Andrew from the DMTx podcast <a href="https://www.youtube.com/watch?v=fDa_iH9R3mw" target="_blank">(watch here)</a>.</p>
+  <p><strong>Mission:</strong> The <em>NICE</em> project (<strong>Nonlocal Intelligent Consciousness Evidence</strong>) seeks to empirically test access to universal intelligence through mathematical tasks. This web app implements the original 20-year-old proposal by Rodriguez and inspiration from Andrew on the DMTx podcast, offering stages from intuitive training to extreme tests of nonlocal retrieval.</p>
+  <p><strong>NICE Acronym:</strong> <em>Nonlocal-Intelligent-Consciousness-Evidence</em></p>
 
   <blockquote>
     “All numbers have a unique set of prime factors… but it’s very difficult to do with large numbers.”<br>&mdash; Rodriguez
@@ -43,7 +44,8 @@
     <option value="8">8 digits (Extreme)</option>
   </select>
   <div class="note">Note: 2–4 digit challenges are for warm-up and intuitive training. Real significance begins from 5 digits upward, where mental factorization becomes impossible and only a nonlocal or computational solution is feasible.</div>
-  <button id="startBtn">Start Challenge</button>
+
+  <button id="summonBtn">Summon Number</button>
 
   <table>
     <thead>
@@ -106,7 +108,7 @@
 
     let current = null;
 
-    document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('summonBtn').addEventListener('click', () => {
       const digits = parseInt(document.getElementById('difficulty').value, 10);
       current = generateComposite(digits);
       document.getElementById('numberDisplay').textContent = `Number: ${current.composite}`;
