@@ -21,7 +21,7 @@
 <body>
   <h1>NICE Prime-Factorization Challenge</h1>
 
-  <p><strong>Mission:</strong> The <em>NICE</em> project (<strong>Nonlocal Intelligent Consciousness Evidence</strong>) seeks to empirically test access to universal intelligence through mathematical tasks. This web app implements the original 20-year-old proposal by Rodriguez and inspiration from Andrew on the DMTx podcast, offering stages from intuitive training to extreme tests of nonlocal retrieval.</p>
+  <p><strong>Mission:</strong> The <em>NICE</em> project (<strong>Nonlocal-Intelligent-Consciousness-Evidence</strong>) seeks to empirically test access to universal intelligence through mathematical tasks. This web app implements the original 20-year-old proposal by Rodriguez and inspiration from Andrew on the DMTx podcast, offering stages from intuitive training to extreme tests of nonlocal retrieval.</p>
   <p><strong>NICE Acronym:</strong> <em>Nonlocal-Intelligent-Consciousness-Evidence</em></p>
 
   <blockquote>
@@ -29,7 +29,7 @@
   </blockquote>
 
   <blockquote>
-    “...we want to prove your existence. Here’s a very large number. Tell me what the unique prime factors are of this number.”<br>&mdash; Andrew (DMTx Podcast)
+    “...we want to prove your existence. Here’s a very large number. Tell me what the unique prime factors are of this number.”<br>&mdash; Andrew (DMTx Podcast) <a href="https://www.youtube.com/watch?v=fDa_iH9R3mw" target="_blank">Watch here</a>
   </blockquote>
 
   <h3>Choose Difficulty (by Number Length)</h3>
@@ -79,31 +79,29 @@
       return true;
     }
 
-    function randomPrime(minDigits, maxDigits) {
-      const min = Math.pow(10, minDigits - 1);
-      const max = Math.pow(10, maxDigits) - 1;
-      while (true) {
-        const candidate = Math.floor(Math.random() * (max - min + 1)) + min;
-        if (isPrime(candidate)) return candidate;
-      }
-    }
-
     function generateComposite(targetDigits) {
       const min = Math.pow(10, targetDigits - 1);
       const max = Math.pow(10, targetDigits) - 1;
-      let result = null;
+      let composite, factors;
 
       while (true) {
-        const p1 = randomPrime(2, targetDigits - 1);
-        const p2 = randomPrime(2, targetDigits - 1);
-        const product = p1 * p2;
-        if (product >= min && product <= max) {
-          result = { composite: product, factors: [p1, p2].sort((a, b) => a - b) };
-          break;
+        const candidate = Math.floor(Math.random() * (max - min + 1)) + min;
+        if (isPrime(candidate)) continue;
+        // attempt factorization into two primes
+        for (let i = 2; i <= Math.sqrt(candidate); i++) {
+          if (candidate % i === 0) {
+            const j = candidate / i;
+            if (isPrime(i) && isPrime(j)) {
+              composite = candidate;
+              factors = [i, j].sort((a, b) => a - b);
+            }
+          }
+          if (factors) break;
         }
+        if (factors) break;
       }
 
-      return result;
+      return { composite, factors };
     }
 
     let current = null;
@@ -115,6 +113,7 @@
       document.getElementById('factors').disabled = false;
       document.getElementById('checkBtn').disabled = false;
       document.getElementById('result').textContent = '';
+      document.getElementById('factors').value = '';
     });
 
     document.getElementById('checkBtn').addEventListener('click', () => {
