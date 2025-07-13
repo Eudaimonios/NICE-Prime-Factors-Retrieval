@@ -12,30 +12,55 @@
     .result { margin-top: 1em; font-weight: bold; }
     blockquote { border-left: 4px solid #ccc; margin: 1em 0; padding-left: 1em; color: #555; }
     a { color: #2980b9; text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background-color: #f4f4f4; }
+    .note { font-size: 0.9em; color: #666; margin-top: 0.5em; }
   </style>
 </head>
 <body>
   <h1>NICE Prime-Factorization Challenge</h1>
 
-  <p><strong>About:</strong> Originally proposed by Rodriguez ~20 years ago as a method to test for nonlocal intelligence through prime factorization. Inspired by Andrew from the DMTx podcast <a href="https://www.youtube.com/watch?v=fDa_iH9R3mw" target="_blank">(watch here)</a>.</p>
+  <p><strong>Mission:</strong> The <em>NICE</em> project (<strong>Nonlocal-Intelligent-Consciousness-Evidence</strong>) seeks to empirically test access to universal intelligence through mathematical tasks. This web app implements the original 20-year-old proposal by Rodriguez and inspiration from Andrew on the DMTx podcast, offering stages from intuitive training to extreme tests of nonlocal retrieval.</p>
+  <p><strong>NICE Acronym:</strong> <em>Nonlocal-Intelligent-Consciousness-Evidence</em></p>
 
   <blockquote>
     “All numbers have a unique set of prime factors… but it’s very difficult to do with large numbers.”<br>&mdash; Rodriguez
   </blockquote>
 
   <blockquote>
-    “...we want to prove your existence. Here’s a very large number. Tell me what the unique prime factors are of this number.”<br>&mdash; Andrew (DMTx Podcast)
+    “...we want to prove your existence. Here’s a very large number. Tell me what the unique prime factors are of this number.”<br>&mdash; Andrew (DMTx Podcast) <a href="https://www.youtube.com/watch?v=fDa_iH9R3mw" target="_blank">Watch here</a>
   </blockquote>
 
-  <label for="difficulty">Choose difficulty (number of digits):</label><br>
+  <h3>Choose Difficulty (by Number Length)</h3>
+  <label for="difficulty">Select the number of digits in the challenge number:</label><br>
   <select id="difficulty">
-    <option value="2">2 digits</option>
-    <option value="3">3 digits</option>
-    <option value="4">4 digits</option>
-    <option value="5">5 digits</option>
-    <option value="6">6 digits</option>
+    <option value="2">2 digits (Training)</option>
+    <option value="3">3 digits (Training)</option>
+    <option value="4">4 digits (Training)</option>
+    <option value="5">5 digits (Experimental)</option>
+    <option value="6">6 digits (Experimental)</option>
+    <option value="7">7 digits (Advanced)</option>
+    <option value="8">8 digits (Extreme)</option>
   </select>
-  <button id="startBtn">Start Challenge</button>
+  <div class="note">Note: 2–4 digit challenges are for warm-up and intuitive training. Real significance begins from 5 digits upward, where mental factorization becomes impossible and only a nonlocal or computational solution is feasible.</div>
+
+  <button id="summonBtn">Summon Number</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Digit Length</th>
+        <th>Category</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>2–4 digits</td><td>Training</td><td>Prime intuition development; human-solvable</td></tr>
+      <tr><td>5–6 digits</td><td>Experimental</td><td>Core of the proposed test; memory-friendly yet computationally hard</td></tr>
+      <tr><td>7–8 digits</td><td>Advanced</td><td>Pushes limits of nonlocal retrieval hypothesis</td></tr>
+    </tbody>
+  </table>
 
   <div class="number-display" id="numberDisplay"></div>
 
@@ -46,7 +71,6 @@
   <div class="result" id="result"></div>
 
   <script>
-    // Utility: trial division primality test
     function isPrime(n) {
       if (n < 2) return false;
       for (let i = 2; i <= Math.sqrt(n); i++) {
@@ -55,34 +79,41 @@
       return true;
     }
 
-    // Generate a random prime with given digit count
-    function randomPrime(digits) {
-      const min = Math.pow(10, digits - 1);
-      const max = Math.pow(10, digits) - 1;
+    function generateComposite(targetDigits) {
+      const min = Math.pow(10, targetDigits - 1);
+      const max = Math.pow(10, targetDigits) - 1;
+      let composite, factors;
+
       while (true) {
         const candidate = Math.floor(Math.random() * (max - min + 1)) + min;
-        if (isPrime(candidate)) return candidate;
+        if (isPrime(candidate)) continue;
+        // attempt factorization into two primes
+        for (let i = 2; i <= Math.sqrt(candidate); i++) {
+          if (candidate % i === 0) {
+            const j = candidate / i;
+            if (isPrime(i) && isPrime(j)) {
+              composite = candidate;
+              factors = [i, j].sort((a, b) => a - b);
+            }
+          }
+          if (factors) break;
+        }
+        if (factors) break;
       }
-    }
 
-    // Generate composite with specified total digits
-    function generateComposite(totalDigits) {
-      const d1 = Math.floor(totalDigits / 2);
-      const d2 = totalDigits - d1;
-      const p1 = randomPrime(d1);
-      const p2 = randomPrime(d2);
-      return { composite: p1 * p2, factors: [p1, p2].sort((a,b)=>a-b) };
+      return { composite, factors };
     }
 
     let current = null;
 
-    document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('summonBtn').addEventListener('click', () => {
       const digits = parseInt(document.getElementById('difficulty').value, 10);
       current = generateComposite(digits);
       document.getElementById('numberDisplay').textContent = `Number: ${current.composite}`;
       document.getElementById('factors').disabled = false;
       document.getElementById('checkBtn').disabled = false;
       document.getElementById('result').textContent = '';
+      document.getElementById('factors').value = '';
     });
 
     document.getElementById('checkBtn').addEventListener('click', () => {
@@ -90,7 +121,7 @@
         .split(',')
         .map(s => parseInt(s.trim(), 10))
         .filter(n => !isNaN(n))
-        .sort((a,b)=>a-b);
+        .sort((a, b) => a - b);
       const correct = JSON.stringify(input) === JSON.stringify(current.factors);
       if (correct) {
         document.getElementById('result').textContent = '✅ Correct! Well done.';
