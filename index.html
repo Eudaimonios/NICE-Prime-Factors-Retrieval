@@ -4,33 +4,86 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NICE Prime-Factorization Challenge</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; line-height: 1.6; padding: 0 20px; }
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; line-height: 1.6; padding: 0 20px; }
     h1 { text-align: center; color: #2c3e50; }
     select, input, button { font-size: 1rem; padding: 0.5em; margin: 0.5em 0; }
-    .number-display { font-size: 1.2rem; font-weight: bold; margin-top: 1em; }
-    .result { margin-top: 1em; font-weight: bold; }
+    .number-display { font-size: 1.2rem; font-weight: bold; margin-top: 1em; background: #f0f8ff; padding: 15px; border-radius: 5px; }
+    .result, .score, .error-info { margin-top: 1em; font-weight: bold; }
     blockquote { border-left: 4px solid #ccc; margin: 1em 0; padding-left: 1em; color: #555; }
     a { color: #2980b9; text-decoration: none; }
     table { width: 100%; border-collapse: collapse; margin-top: 1em; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
     th { background-color: #f4f4f4; }
     .note { font-size: 0.9em; color: #666; margin-top: 0.5em; }
+    #chartContainer { width: 100%; margin-top: 2em; height: 400px; }
+    #shareBtn { margin-top: 1em; }
+    .explanation { background: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; }
+    .example { background: #e8f5e8; padding: 15px; border-radius: 5px; margin: 10px 0; }
+    .warning { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #ffc107; }
+    .success { color: #28a745; }
+    .error { color: #dc3545; }
+    .baseline { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; }
   </style>
 </head>
 <body>
   <h1>NICE Prime-Factorization Challenge</h1>
 
-  <p><strong>Mission:</strong> The <em>NICE</em> project (<strong>Nonlocal-Intelligent-Consciousness-Evidence</strong>) seeks to empirically test access to universal intelligence through mathematical tasks. This web app implements the original 20-year-old proposal by Rodriguez and inspiration from Andrew on the DMTx podcast, offering stages from intuitive training to extreme tests of nonlocal retrieval.</p>
-  <p><strong>NICE Acronym:</strong> <em>Nonlocal-Intelligent-Consciousness-Evidence</em></p>
+  <p><strong>Mission:</strong> The <em>NICE</em> project (<strong>Neurophenomenological Integrated Comparative Empiricism</strong>) is a convergent framework and platform that unites first‑person experience (intuitive symbols, insights) with third‑person data (accuracy scores, statistical baselines), allowing practitioners to compare and track progress across spiritual disciplines via a shared, verifiable protocol.</p>
+  <p><strong>Aim:</strong> To cultivate inner clarity and outer accountability, mapping real shifts in consciousness and deepening our collective understanding of reality.</p>
 
   <blockquote>
-    “All numbers have a unique set of prime factors… but it’s very difficult to do with large numbers.”<br>&mdash; Rodriguez
+    "All numbers have a unique set of prime factors… but it's very difficult to do with large numbers."<br>&mdash; Rodriguez
   </blockquote>
 
   <blockquote>
-    “...we want to prove your existence. Here’s a very large number. Tell me what the unique prime factors are of this number.”<br>&mdash; Andrew (DMTx Podcast) <a href="https://www.youtube.com/watch?v=fDa_iH9R3mw" target="_blank">Watch here</a>
+    "...we want to prove your existence. Here's a very large number. Tell me what the unique prime factors are of this number."<br>&mdash; Andrew (DMTx Podcast) <a href="https://www.youtube.com/watch?v=fDa_iH9R3mw" target="_blank">Watch here</a>
   </blockquote>
+
+  <div class="explanation">
+    <h3>🧠 Challenge Difficulty & Mathematical Context</h3>
+    <p>Prime factorization becomes exponentially harder as numbers grow larger. Here's why this challenge is significant:</p>
+    
+    <div class="example">
+      <strong>Easy Examples (2-4 digits):</strong><br>
+      • 15 = 3 × 5 (trivial)<br>
+      • 77 = 7 × 11 (solvable by division)<br>
+      • 143 = 11 × 13 (requires systematic checking)<br>
+      • 2,021 = 43 × 47 (difficult but doable)
+    </div>
+
+    <div class="warning">
+      <strong>Computational Impossibility at Scale:</strong><br>
+      • 5-digit numbers: ~10,000 possibilities to check<br>
+      • 6-digit numbers: ~100,000 possibilities<br>
+      • Current cryptography relies on this difficulty (RSA-2048 uses ~600-digit numbers)
+    </div>
+
+    <div class="baseline">
+      <strong>Statistical Baseline:</strong> Random guessing has essentially 0% success rate for 5+ digit numbers. Even with systematic approaches, factoring a random 6-digit semiprime would take hours or days by hand.
+    </div>
+  </div>
+
+  <div class="explanation">
+    <h3>🔬 Empirical Framework & Spiritual Practice Claims</h3>
+    <p>The NICE protocol tests whether spiritual/consciousness practices can access information beyond normal cognitive processing:</p>
+    
+    <p><strong>Hypothesis:</strong> Advanced practitioners might access "nonlocal" information through altered states of consciousness, intuitive insights, or other non-computational means.</p>
+    
+    <p><strong>Controls:</strong> The mathematical nature provides objective verification - factors either multiply correctly or they don't. No subjective interpretation needed.</p>
+    
+    <p><strong>Expected Outcomes:</strong></p>
+    <ul>
+      <li>Baseline humans: ~0-2% success on 5+ digit numbers (random chance)</li>
+      <li>If consciousness/spiritual practices work: Significantly higher success rates</li>
+      <li>Reproducibility across practitioners would suggest genuine phenomenon</li>
+    </ul>
+    
+    <div class="warning">
+      <strong>Scientific Caveat:</strong> Extraordinary claims require extraordinary evidence. Consistent success above chance levels would warrant serious investigation, but isolated successes could be coincidence or computational assistance.
+    </div>
+  </div>
 
   <h3>Choose Difficulty (by Number Length)</h3>
   <label for="difficulty">Select the number of digits in the challenge number:</label><br>
@@ -43,100 +96,243 @@
     <option value="7">7 digits (Advanced)</option>
     <option value="8">8 digits (Extreme)</option>
   </select>
-  <div class="note">Note: 2–4 digit challenges are for warm-up and intuitive training. Real significance begins from 5 digits upward, where mental factorization becomes impossible and only a nonlocal or computational solution is feasible.</div>
-
+  <div class="note">2–4 digits are warm-up; significance starts at 5 digits, where mental factorization becomes practically impossible.</div>
   <button id="summonBtn">Summon Number</button>
 
   <table>
-    <thead>
-      <tr>
-        <th>Digit Length</th>
-        <th>Category</th>
-        <th>Purpose</th>
-      </tr>
-    </thead>
+    <thead><tr><th>Digits</th><th>Category</th><th>Purpose</th><th>Estimated Difficulty</th></tr></thead>
     <tbody>
-      <tr><td>2–4 digits</td><td>Training</td><td>Prime intuition development; human-solvable</td></tr>
-      <tr><td>5–6 digits</td><td>Experimental</td><td>Core of the proposed test; memory-friendly yet computationally hard</td></tr>
-      <tr><td>7–8 digits</td><td>Advanced</td><td>Pushes limits of nonlocal retrieval hypothesis</td></tr>
+      <tr><td>2–4</td><td>Training</td><td>Develop intuition; human-solvable</td><td>Minutes to hours</td></tr>
+      <tr><td>5–6</td><td>Experimental</td><td>Core test; memory-friendly yet computationally hard</td><td>Hours to days</td></tr>
+      <tr><td>7–8</td><td>Advanced</td><td>Push limits of nonlocal retrieval hypothesis</td><td>Weeks to months</td></tr>
     </tbody>
   </table>
 
-  <div class="number-display" id="numberDisplay"></div>
-
+  <div class="number-display" id="numberDisplay">Click "Summon Number" to begin</div>
   <label for="factors">Enter prime factors (comma-separated):</label><br>
   <input type="text" id="factors" placeholder="e.g. 13,17" size="30" disabled />
   <button id="checkBtn" disabled>Check Answer</button>
 
   <div class="result" id="result"></div>
+  <div class="score" id="score"></div>
+  <div class="error-info" id="errorInfo"></div>
+  <div id="chartContainer"><canvas id="resultChart"></canvas></div>
+  <button id="shareBtn" style="display: none;">Share Results</button>
 
   <script>
+    let results = [];
+    let currentChart = null;
+
+    // Initialize results from memory (no localStorage in Claude.ai)
+    function loadResults() {
+      // In a real environment, this would load from localStorage
+      results = [];
+    }
+
+    function saveResults() {
+      // In a real environment, this would save to localStorage
+      // For now, just keep in memory
+    }
+
     function isPrime(n) {
       if (n < 2) return false;
-      for (let i = 2; i <= Math.sqrt(n); i++) {
+      if (n === 2) return true;
+      if (n % 2 === 0) return false;
+      for (let i = 3; i <= Math.sqrt(n); i += 2) {
         if (n % i === 0) return false;
       }
       return true;
     }
 
-    function generateComposite(targetDigits) {
-      const min = Math.pow(10, targetDigits - 1);
-      const max = Math.pow(10, targetDigits) - 1;
-      let composite = null;
-      let factors = null;
-      const maxAttempts = 10000;
+    function generateComposite(digits) {
+      const min = 10 ** (digits - 1);
+      const max = 10 ** digits - 1;
       let attempts = 0;
-
-      while (attempts < maxAttempts) {
-        attempts++;
-        const a = Math.floor(Math.random() * (max - min + 1)) + min;
-        if (isPrime(a)) continue;
-        for (let i = 2; i <= Math.sqrt(a); i++) {
-          if (a % i === 0) {
-            const j = a / i;
-            if (isPrime(i) && isPrime(j) && Number.isInteger(j)) {
-              composite = a;
-              factors = [i, j].sort((x, y) => x - y);
-              return { composite, factors };
+      
+      while (attempts++ < 10000) {
+        const num = Math.floor(Math.random() * (max - min + 1)) + min;
+        if (isPrime(num)) continue;
+        
+        // Find prime factors
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+          if (num % i === 0) {
+            const j = num / i;
+            if (Number.isInteger(j) && isPrime(i) && isPrime(j)) {
+              return { composite: num, factors: [i, j].sort((x, y) => x - y) };
             }
           }
         }
       }
+      
+      // Fallback: generate a simple semiprime
+      const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+      let p1, p2, product;
+      
+      do {
+        p1 = primes[Math.floor(Math.random() * primes.length)];
+        p2 = primes[Math.floor(Math.random() * primes.length)];
+        product = p1 * p2;
+      } while (product < min || product > max);
+      
+      return { composite: product, factors: [Math.min(p1, p2), Math.max(p1, p2)] };
+    }
 
-      return { composite: null, factors: null };
+    function updateScore() {
+      const total = results.length;
+      if (total === 0) {
+        document.getElementById('score').innerHTML = '<strong>Score:</strong> Start testing to see your results!';
+        return;
+      }
+      
+      const correct = results.filter(r => r.success).length;
+      const rate = total > 0 ? (correct / total * 100) : 0;
+      const avgError = total > 0 ? (results.reduce((sum, r) => sum + (r.error || 0), 0) / total) : 0;
+      
+      document.getElementById('score').innerHTML =
+        `<strong>Score:</strong> ${correct}/${total} (${rate.toFixed(1)}% correct)<br>` +
+        `<strong>Avg. Error:</strong> ${avgError.toFixed(1)} deviation from target number.<br>` +
+        `<strong>Baseline:</strong> Random chance ≈ 0.001% for 5+ digit numbers`;
+    }
+
+    function renderChart() {
+      const ctx = document.getElementById('resultChart').getContext('2d');
+      
+      if (currentChart) {
+        currentChart.destroy();
+      }
+      
+      if (results.length === 0) return;
+      
+      currentChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: results.map((_, i) => `Attempt ${i + 1}`),
+          datasets: [{
+            label: 'Success Rate',
+            data: results.map((r, i) => {
+              const successes = results.slice(0, i + 1).filter(x => x.success).length;
+              return (successes / (i + 1)) * 100;
+            }),
+            borderColor: '#2980b9',
+            fill: false,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { 
+              min: 0, 
+              max: 100,
+              title: {
+                display: true,
+                text: 'Success Rate (%)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Attempts'
+              }
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Performance Over Time'
+            }
+          }
+        }
+      });
     }
 
     let current = null;
-
+    
     document.getElementById('summonBtn').addEventListener('click', () => {
-      const digits = parseInt(document.getElementById('difficulty').value, 10);
-      current = generateComposite(digits);
-      if (!current.composite) {
-        document.getElementById('numberDisplay').textContent = `⚠️ Failed to generate number. Please try again.`;
-        document.getElementById('factors').disabled = true;
-        document.getElementById('checkBtn').disabled = true;
-        return;
-      }
-      document.getElementById('numberDisplay').textContent = `Number: ${current.composite}`;
+      const d = parseInt(document.getElementById('difficulty').value);
+      current = generateComposite(d);
+      document.getElementById('numberDisplay').innerHTML = `<strong>Number to Factor:</strong> ${current.composite}`;
       document.getElementById('factors').disabled = false;
       document.getElementById('checkBtn').disabled = false;
       document.getElementById('result').textContent = '';
+      document.getElementById('errorInfo').textContent = '';
       document.getElementById('factors').value = '';
+      document.getElementById('factors').focus();
     });
 
     document.getElementById('checkBtn').addEventListener('click', () => {
-      const input = document.getElementById('factors').value
-        .split(',')
-        .map(s => parseInt(s.trim(), 10))
-        .filter(n => !isNaN(n))
-        .sort((a, b) => a - b);
-      const correct = JSON.stringify(input) === JSON.stringify(current.factors);
-      if (correct) {
-        document.getElementById('result').textContent = '✅ Correct! Well done.';
+      if (!current) return;
+      
+      const inputStr = document.getElementById('factors').value.trim();
+      if (!inputStr) {
+        alert('Please enter prime factors!');
+        return;
+      }
+      
+      const input = inputStr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0);
+      
+      if (input.length === 0) {
+        alert('Please enter valid numbers!');
+        return;
+      }
+      
+      const userProduct = input.reduce((a, b) => a * b, 1);
+      const success = JSON.stringify(input.sort((a, b) => a - b)) === JSON.stringify(current.factors);
+      const error = Math.abs(userProduct - current.composite);
+      
+      results.push({ 
+        composite: current.composite, 
+        success, 
+        error,
+        digits: current.composite.toString().length,
+        userFactors: input.slice(),
+        correctFactors: current.factors.slice()
+      });
+      
+      saveResults();
+      
+      if (success) {
+        document.getElementById('result').innerHTML = '<span class="success">✅ Correct! Exceptional performance!</span>';
       } else {
-        document.getElementById('result').innerHTML = `❌ Incorrect. Correct factors are: ${current.factors.join(', ')}`;
+        document.getElementById('result').innerHTML = `<span class="error">❌ Incorrect.</span> Correct factors: ${current.factors.join(' × ')} = ${current.composite}`;
+      }
+      
+      document.getElementById('errorInfo').textContent = `Your factors: ${input.join(' × ')} = ${userProduct} (off by ${error})`;
+      
+      updateScore();
+      renderChart();
+      
+      document.getElementById('shareBtn').style.display = 'block';
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', () => {
+      const summary = `NICE Prime Challenge Results:\n${results.length} attempts, ${results.filter(r => r.success).length} successes\nSuccess rate: ${((results.filter(r => r.success).length / results.length) * 100).toFixed(1)}%`;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(summary).then(() => {
+          alert('Results summary copied to clipboard!');
+        }).catch(() => {
+          alert('Summary:\n' + summary);
+        });
+      } else {
+        alert('Summary:\n' + summary);
       }
     });
+
+    // Allow Enter key to submit
+    document.getElementById('factors').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !document.getElementById('checkBtn').disabled) {
+        document.getElementById('checkBtn').click();
+      }
+    });
+
+    // Initialize
+    loadResults();
+    updateScore();
+    if (results.length > 0) {
+      renderChart();
+    }
   </script>
 </body>
 </html>
