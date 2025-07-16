@@ -4,550 +4,414 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NICE Prime-Factorization Challenge</title>
+
   <style>
-    body { font-family: Arial, sans-serif; max-width: 1000px; margin: 40px auto; line-height: 1.6; padding: 0 20px; }
-    h1 { text-align: center; color: #2c3e50; }
-    select, input, button { font-size: 1rem; padding: 0.5em; margin: 0.5em 0; }
-    .number-display { font-size: 1.2rem; font-weight: bold; margin-top: 1em; background: #f0f8ff; padding: 15px; border-radius: 5px; }
-    .result, .score, .error-info { margin-top: 1em; font-weight: bold; }
-    blockquote { border-left: 4px solid #ccc; margin: 1em 0; padding-left: 1em; color: #555; }
-    a { color: #2980b9; text-decoration: none; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-    th { background-color: #f4f4f4; }
-    .note { font-size: 0.9em; color: #666; margin-top: 0.5em; }
-    .explanation { background: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0; }
-    .example { background: #e8f5e8; padding: 15px; border-radius: 5px; margin: 10px 0; }
-    .warning { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #ffc107; }
-    .success { color: #28a745; }
-    .error { color: #dc3545; }
-    .baseline { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; }
-    
-    /* Chart Styles */
-    .chart-container { 
-      width: 100%; 
-      height: 400px; 
-      border: 1px solid #ddd; 
-      margin: 20px 0; 
-      padding: 20px; 
-      background: #f9f9f9;
-      border-radius: 5px;
+    :root {
+      --bg: #fdfdfd;
+      --fg: #111;
+      --accent: #0077ff;
+      --success: #0a9f00;
+      --error: #d0021b;
+      --warn: #ff9800;
+      --muted: #666;
+      --radius: 6px;
+      --shadow: 0 2px 8px rgba(0,0,0,.08);
+      --font: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-    .chart-title {
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      padding: 2rem 1rem;
+      line-height: 1.6;
+    }
+
+    header {
       text-align: center;
-      font-weight: bold;
-      margin-bottom: 15px;
-      font-size: 1.1em;
+      margin-bottom: 2rem;
     }
-    .chart-area {
-      height: 300px;
-      position: relative;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      overflow: hidden;
+
+    h1 { font-size: 2rem; margin: 0 0 .5rem; color: var(--accent); }
+    h2 { font-size: 1.4rem; margin: 2rem 0 .5rem; color: var(--accent); }
+    h3 { font-size: 1.2rem; margin: 1.5rem 0 .5rem; color: var(--accent); }
+
+    section {
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      padding: 1.5rem;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
     }
-    .chart-y-axis {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 60px;
-      height: 100%;
-      background: #f5f5f5;
-      border-right: 1px solid #ddd;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 10px 5px;
-      font-size: 0.8em;
+
+    blockquote {
+      border-left: 4px solid var(--accent);
+      padding-left: 1rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: var(--muted);
     }
-    .chart-plot-area {
-      position: absolute;
-      left: 61px;
-      top: 0;
-      right: 0;
-      bottom: 30px;
-      background: white;
+
+    .note, .warning, .example, .baseline {
+      padding: 1rem;
+      border-left: 4px solid;
+      margin: 1rem 0;
+      border-radius: var(--radius);
     }
-    .chart-x-axis {
-      position: absolute;
-      bottom: 0;
-      left: 61px;
-      right: 0;
-      height: 30px;
-      background: #f5f5f5;
-      border-top: 1px solid #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8em;
+    .note   { border-color: var(--accent); background: #f0f8ff; }
+    .warning{ border-color: var(--warn);   background: #fff3e0; }
+    .example{ border-color: var(--success);background: #e8f5e8; }
+    .baseline{ border-color: var(--muted);  background: #f8f9fa; }
+
+    label { font-weight: 600; display: block; margin: 1rem 0 .25rem; }
+    select, input, button {
+      font-size: 1rem;
+      padding: .6rem .75rem;
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 320px;
     }
-    .chart-point {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: 2px solid white;
-      box-shadow: 0 0 3px rgba(0,0,0,0.3);
+      transition: background .2s;
     }
-    .chart-point:hover {
-      transform: scale(1.5);
-      z-index: 10;
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    button:not(:disabled):hover { background: #0057cc; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
     }
-    .chart-tooltip {
-      position: absolute;
-      background: #333;
-      color: white;
-      padding: 5px 8px;
-      border-radius: 3px;
-      font-size: 0.8em;
-      pointer-events: none;
-      z-index: 20;
-      white-space: nowrap;
-    }
-    .chart-baseline {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: #ff6b6b;
-      opacity: 0.7;
-    }
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin: 15px 0;
-      flex-wrap: wrap;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.9em;
-    }
-    .legend-color {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 1px solid #333;
-    }
-    
-    /* Difficulty Colors */
-    .difficulty-2 { background-color: #28a745; }
-    .difficulty-3 { background-color: #17a2b8; }
-    .difficulty-4 { background-color: #007bff; }
-    .difficulty-5 { background-color: #ffc107; }
-    .difficulty-6 { background-color: #fd7e14; }
-    .difficulty-7 { background-color: #dc3545; }
-    .difficulty-8 { background-color: #6f42c1; }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-    .stat-card {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 5px;
+    th, td { padding: .5rem .75rem; border: 1px solid #ddd; text-align: center; }
+    th { background: #f4f4f4; }
+
+    #numberDisplay {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 1rem 0;
+      background: #eef;
+      padding: 1rem;
+      border-radius: var(--radius);
       text-align: center;
-      border: 1px solid #e9ecef;
     }
-    .stat-number {
-      font-size: 1.5em;
+
+    #result, #score, #errorInfo {
+      margin: .75rem 0;
+      font-weight: 600;
+    }
+    .success { color: var(--success); }
+    .error   { color: var(--error); }
+
+    /* Chart */
+    #chartContainer {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    #chartArea {
+      height: 120px;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      border-bottom: 2px solid #333;
+      margin: 1rem 0;
+    }
+    .chart-bar {
+      width: 18px;
+      margin: 0 2px;
+      background: var(--accent);
+      transition: height .3s, background .3s;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .chart-labels {
+      font-size: .75rem;
+      color: var(--muted);
+    }
+
+    /* Hint & Timer */
+    .hint-box {
+      margin-top: 1rem;
+      font-size: .9rem;
+      color: var(--muted);
+    }
+    #timer {
       font-weight: bold;
-      color: #2c3e50;
     }
-    .stat-label {
-      font-size: 0.9em;
-      color: #666;
-      margin-top: 5px;
+
+    /* Responsive */
+    @media (min-width: 600px) {
+      body { padding: 2rem 4rem; }
+      button { width: auto; }
     }
   </style>
 </head>
 <body>
-  <h1>NICE Prime-Factorization Challenge</h1>
 
-  <p><strong>Mission:</strong> The <em>NICE</em> project (<strong>Neurophenomenological Integrated Comparative Empiricism</strong>) is a convergent framework and platform that unites first‑person experience (intuitive symbols, insights) with third‑person data (accuracy scores, statistical baselines), allowing practitioners to compare and track progress across spiritual disciplines via a shared, verifiable protocol.</p>
-  <p><strong>Aim:</strong> To cultivate inner clarity and outer accountability, mapping real shifts in consciousness and deepening our collective understanding of reality.</p>
+  <header>
+    <h1>NICE Prime-Factorization Challenge</h1>
+    <p>Neurophenomenological Integrated Comparative Empiricism</p>
+  </header>
 
-  <blockquote>
-    "All numbers have a unique set of prime factors… but it's very difficult to do with large numbers."<br>&mdash; Rodriguez
-  </blockquote>
+  <section>
+    <h2>🎯 Purpose</h2>
+    <p>This experiment tests whether advanced spiritual or consciousness practices can enable access to non-local information by asking you to mentally factor large semiprime numbers.</p>
+    <p><strong>Baseline:</strong> Random chance is effectively 0 % for numbers ≥ 5 digits.</p>
+  </section>
 
-  <blockquote>
-    "...we want to prove your existence. Here's a very large number. Tell me what the unique prime factors are of this number."<br>&mdash; Andrew (DMTx Podcast) <a href="https://www.youtube.com/watch?v=fDa_iH9R3mw" target="_blank">Watch here</a>
-  </blockquote>
+  <section>
+    <h2>1. How it works</h2>
+    <ol>
+      <li>Select digit length (2–8). <em>Training = 2–4, Experimental = 5–6, Advanced = 7–8.</em></li>
+      <li>Click “Summon Number”. Memorize it.</li>
+      <li>Enter the two prime factors separated by a comma.</li>
+      <li>Track your success rate and time.</li>
+    </ol>
+  </section>
 
-  <div class="explanation">
-    <h3>🧠 Challenge Difficulty & Mathematical Context</h3>
-    <p>Prime factorization becomes exponentially harder as numbers grow larger. The graph shows how close your answers are to the correct solution compared to random chance:</p>
-    
-    <div class="example">
-      <strong>Easy Examples (2-4 digits):</strong><br>
-      • 15 = 3 × 5 (trivial)<br>
-      • 77 = 7 × 11 (solvable by division)<br>
-      • 143 = 11 × 13 (requires systematic checking)<br>
-      • 2,021 = 43 × 47 (difficult but doable)
-    </div>
-
-    <div class="warning">
-      <strong>Computational Impossibility at Scale:</strong><br>
-      • 5-digit numbers: ~10,000 possibilities to check<br>
-      • 6-digit numbers: ~100,000 possibilities<br>
-      • Current cryptography relies on this difficulty (RSA-2048 uses ~600-digit numbers)
-    </div>
-
-    <div class="baseline">
-      <strong>Statistical Baseline:</strong> Random guessing has essentially 0% success rate for 5+ digit numbers. The graph shows deviation from this baseline - any consistent performance above the red line suggests non-random information access.
-    </div>
-  </div>
-
-  <h3>Choose Difficulty (by Number Length)</h3>
-  <label for="difficulty">Select the number of digits in the challenge number:</label><br>
-  <select id="difficulty">
-    <option value="2">2 digits (Training)</option>
-    <option value="3">3 digits (Training)</option>
-    <option value="4">4 digits (Training)</option>
-    <option value="5">5 digits (Experimental)</option>
-    <option value="6">6 digits (Experimental)</option>
-    <option value="7">7 digits (Advanced)</option>
-    <option value="8">8 digits (Extreme)</option>
-  </select>
-  <div class="note">2–4 digits are warm-up; significance starts at 5 digits, where mental factorization becomes practically impossible.</div>
-  <button id="summonBtn">Summon Number</button>
+  <section>
+    <h2>2. Choose difficulty</h2>
+    <label for="difficulty">Digits in the number:</label>
+    <select id="difficulty">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select>
+    <button id="summonBtn">Summon Number</button>
+  </section>
 
   <table>
-    <thead><tr><th>Digits</th><th>Category</th><th>Color</th><th>Purpose</th><th>Estimated Difficulty</th></tr></thead>
+    <thead>
+      <tr><th>Digits</th><th>Category</th><th>Human Difficulty</th></tr>
+    </thead>
     <tbody>
-      <tr><td>2</td><td>Training</td><td><span class="legend-color difficulty-2"></span></td><td>Build confidence</td><td>Seconds</td></tr>
-      <tr><td>3</td><td>Training</td><td><span class="legend-color difficulty-3"></span></td><td>Learn patterns</td><td>Minutes</td></tr>
-      <tr><td>4</td><td>Training</td><td><span class="legend-color difficulty-4"></span></td><td>Develop intuition</td><td>Minutes to hours</td></tr>
-      <tr><td>5</td><td>Experimental</td><td><span class="legend-color difficulty-5"></span></td><td>Core test</td><td>Hours to days</td></tr>
-      <tr><td>6</td><td>Experimental</td><td><span class="legend-color difficulty-6"></span></td><td>Significance threshold</td><td>Days to weeks</td></tr>
-      <tr><td>7</td><td>Advanced</td><td><span class="legend-color difficulty-7"></span></td><td>Push limits</td><td>Weeks to months</td></tr>
-      <tr><td>8</td><td>Extreme</td><td><span class="legend-color difficulty-8"></span></td><td>Ultimate challenge</td><td>Months to years</td></tr>
+      <tr><td>2–4</td><td>Training</td><td>Minutes to hours</td></tr>
+      <tr><td>5–6</td><td>Experimental</td><td>Hours to days</td></tr>
+      <tr><td>7–8</td><td>Advanced</td><td>Weeks to months</td></tr>
     </tbody>
   </table>
 
-  <div class="number-display" id="numberDisplay">Click "Summon Number" to begin</div>
-  <label for="factors">Enter prime factors (comma-separated):</label><br>
-  <input type="text" id="factors" placeholder="e.g. 13,17" size="30" disabled />
-  <button id="checkBtn" disabled>Check Answer</button>
+  <section id="challengeArea" style="display:none;">
+    <h2>3. Factor the number</h2>
+    <div id="numberDisplay"></div>
+    <label for="factors">Prime factors (comma-separated):</label>
+    <input id="factors" type="text" placeholder="e.g. 13,17" autocomplete="off" />
+    <button id="checkBtn">Check Answer</button>
+    <div id="timer">00:00</div>
+    <div id="result"></div>
+    <div id="errorInfo"></div>
 
-  <div class="result" id="result"></div>
-  <div class="error-info" id="errorInfo"></div>
+    <div class="hint-box">
+      <button id="hintBtn">Give me a hint</button>
+      <span id="hintText"></span>
+    </div>
+  </section>
 
-  <div class="stats-grid" id="statsGrid" style="display: none;">
-    <div class="stat-card">
-      <div class="stat-number" id="totalAttempts">0</div>
-      <div class="stat-label">Total Attempts</div>
+  <section>
+    <h2>4. Your progress</h2>
+    <div id="score">No attempts yet.</div>
+    <div id="chartContainer" style="display:none;">
+      <h3>Success Rate Over Time</h3>
+      <div id="chartArea"></div>
+      <div class="chart-labels" id="chartLabels"></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-number" id="perfectScore">0</div>
-      <div class="stat-label">Perfect Scores</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="avgAccuracy">0%</div>
-      <div class="stat-label">Avg Accuracy</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="bestAccuracy">0%</div>
-      <div class="stat-label">Best Accuracy</div>
-    </div>
-  </div>
-
-  <div class="chart-container" id="chartContainer" style="display: none;">
-    <div class="chart-title">Accuracy vs Attempts (Colored by Difficulty)</div>
-    <div class="legend">
-      <div class="legend-item"><span class="legend-color difficulty-2"></span> 2-digit</div>
-      <div class="legend-item"><span class="legend-color difficulty-3"></span> 3-digit</div>
-      <div class="legend-item"><span class="legend-color difficulty-4"></span> 4-digit</div>
-      <div class="legend-item"><span class="legend-color difficulty-5"></span> 5-digit</div>
-      <div class="legend-item"><span class="legend-color difficulty-6"></span> 6-digit</div>
-      <div class="legend-item"><span class="legend-color difficulty-7"></span> 7-digit</div>
-      <div class="legend-item"><span class="legend-color difficulty-8"></span> 8-digit</div>
-    </div>
-    <div class="chart-area">
-      <div class="chart-y-axis" id="yAxis"></div>
-      <div class="chart-plot-area" id="plotArea"></div>
-      <div class="chart-x-axis">Attempt Number</div>
-    </div>
-    <div class="note">Red line shows random chance baseline. Points above this line suggest non-random information access.</div>
-  </div>
-
-  <button id="shareBtn" style="display: none;">Share Results</button>
+    <button id="shareBtn" style="display:none;">Share Results</button>
+  </section>
 
   <script>
-    // Session storage for this page session only
-    let sessionResults = [];
-    
-    function isPrime(n) {
+    /* ---------- Utilities ---------- */
+    const isPrime = n => {
       if (n < 2) return false;
-      if (n === 2) return true;
-      if (n % 2 === 0) return false;
-      for (let i = 3; i <= Math.sqrt(n); i += 2) {
-        if (n % i === 0) return false;
-      }
+      if (n % 2 === 0) return n === 2;
+      for (let i = 3; i * i <= n; i += 2) if (n % i === 0) return false;
       return true;
-    }
+    };
 
+    /* ---------- Data ---------- */
+    let current = null;
+    let results = JSON.parse(localStorage.getItem('niceResults') || '[]');
+    let timerInterval;
+    let startTime;
+
+    /* ---------- DOM Shortcuts ---------- */
+    const $ = sel => document.querySelector(sel);
+    const difficulty = $('#difficulty');
+    const summonBtn = $('#summonBtn');
+    const challengeArea = $('#challengeArea');
+    const numberDisplay = $('#numberDisplay');
+    const factorsInput = $('#factors');
+    const checkBtn = $('#checkBtn');
+    const timer = $('#timer');
+    const result = $('#result');
+    const errorInfo = $('#errorInfo');
+    const score = $('#score');
+    const chartContainer = $('#chartContainer');
+    const chartArea = $('#chartArea');
+    const chartLabels = $('#chartLabels');
+    const shareBtn = $('#shareBtn');
+    const hintBtn = $('#hintBtn');
+    const hintText = $('#hintText');
+
+    /* ---------- Generate Semiprime ---------- */
     function generateComposite(digits) {
       const min = 10 ** (digits - 1);
       const max = 10 ** digits - 1;
-      
-      // Generate a simple semiprime (product of exactly two primes)
-      const primes = [];
-      for (let i = 2; i <= Math.sqrt(max); i++) {
-        if (isPrime(i)) primes.push(i);
-      }
-      
       let attempts = 0;
-      while (attempts++ < 1000) {
-        const p1 = primes[Math.floor(Math.random() * primes.length)];
-        const p2 = primes[Math.floor(Math.random() * primes.length)];
-        const product = p1 * p2;
-        
-        if (product >= min && product <= max) {
-          return { 
-            composite: product, 
-            factors: [Math.min(p1, p2), Math.max(p1, p2)],
-            digits: digits
-          };
+      while (attempts++ < 1e4) {
+        const n = min + Math.floor(Math.random() * (max - min + 1));
+        if (isPrime(n)) continue;
+        for (let i = 2; i * i <= n; ++i) {
+          if (n % i === 0) {
+            const j = n / i;
+            if (Number.isInteger(j) && isPrime(i) && isPrime(j)) {
+              return { composite: n, factors: [i, j].sort((a, b) => a - b) };
+            }
+          }
         }
       }
-      
-      // Fallback for very constrained ranges
-      const small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
-      const p1 = small_primes[Math.floor(Math.random() * small_primes.length)];
-      const p2 = small_primes[Math.floor(Math.random() * small_primes.length)];
-      const product = p1 * p2;
-      
-      return { 
-        composite: product, 
-        factors: [Math.min(p1, p2), Math.max(p1, p2)],
-        digits: digits
-      };
+      // Fallback
+      const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+      let p1, p2, prod;
+      do {
+        p1 = primes[Math.floor(Math.random() * primes.length)];
+        p2 = primes[Math.floor(Math.random() * primes.length)];
+        prod = p1 * p2;
+      } while (prod < min || prod > max);
+      return { composite: prod, factors: [Math.min(p1, p2), Math.max(p1, p2)] };
     }
 
-    function calculateAccuracy(userFactors, correctFactors, targetNumber) {
-      if (userFactors.length === 0) return 0;
-      
-      const userProduct = userFactors.reduce((a, b) => a * b, 1);
-      const correctProduct = correctFactors.reduce((a, b) => a * b, 1);
-      
-      // Perfect match
-      if (userProduct === correctProduct && 
-          JSON.stringify(userFactors.sort()) === JSON.stringify(correctFactors.sort())) {
-        return 100;
-      }
-      
-      // Calculate how close the product is to the target
-      const error = Math.abs(userProduct - targetNumber);
-      const maxError = Math.max(targetNumber, userProduct);
-      const proximityScore = Math.max(0, 100 - (error / maxError * 100));
-      
-      // Bonus for having correct number of factors
-      const factorCountBonus = userFactors.length === correctFactors.length ? 10 : 0;
-      
-      // Bonus for having any correct factors
-      const correctFactorBonus = correctFactors.filter(f => userFactors.includes(f)).length * 5;
-      
-      return Math.min(100, proximityScore + factorCountBonus + correctFactorBonus);
+    /* ---------- Timer ---------- */
+    function startTimer() {
+      clearInterval(timerInterval);
+      startTime = Date.now();
+      timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        const s = String(elapsed % 60).padStart(2, '0');
+        timer.textContent = `${m}:${s}`;
+      }, 1000);
     }
 
-    function updateStats() {
-      if (sessionResults.length === 0) {
-        document.getElementById('statsGrid').style.display = 'none';
-        return;
-      }
-      
-      document.getElementById('statsGrid').style.display = 'grid';
-      
-      const total = sessionResults.length;
-      const perfect = sessionResults.filter(r => r.accuracy === 100).length;
-      const avgAccuracy = sessionResults.reduce((sum, r) => sum + r.accuracy, 0) / total;
-      const bestAccuracy = Math.max(...sessionResults.map(r => r.accuracy));
-      
-      document.getElementById('totalAttempts').textContent = total;
-      document.getElementById('perfectScore').textContent = perfect;
-      document.getElementById('avgAccuracy').textContent = avgAccuracy.toFixed(1) + '%';
-      document.getElementById('bestAccuracy').textContent = bestAccuracy.toFixed(1) + '%';
-    }
-
+    /* ---------- Chart ---------- */
     function renderChart() {
-      if (sessionResults.length === 0) {
-        document.getElementById('chartContainer').style.display = 'none';
-        return;
-      }
-      
-      document.getElementById('chartContainer').style.display = 'block';
-      
-      const plotArea = document.getElementById('plotArea');
-      const yAxis = document.getElementById('yAxis');
-      
-      // Clear existing content
-      plotArea.innerHTML = '';
-      yAxis.innerHTML = '';
-      
-      // Create Y-axis labels
-      for (let i = 0; i <= 100; i += 20) {
-        const label = document.createElement('div');
-        label.textContent = i + '%';
-        label.style.textAlign = 'center';
-        yAxis.appendChild(label);
-      }
-      
-      // Add baseline line (random chance - essentially 0% for 5+ digits)
-      const baseline = document.createElement('div');
-      baseline.className = 'chart-baseline';
-      baseline.style.bottom = '5%'; // 5% line
-      baseline.title = 'Random chance baseline';
-      plotArea.appendChild(baseline);
-      
-      // Plot points
-      const plotWidth = plotArea.offsetWidth - 20;
-      const plotHeight = plotArea.offsetHeight - 20;
-      
-      sessionResults.forEach((result, index) => {
-        const point = document.createElement('div');
-        point.className = `chart-point difficulty-${result.digits}`;
-        
-        // Position
-        const x = (index / Math.max(1, sessionResults.length - 1)) * plotWidth;
-        const y = plotHeight - (result.accuracy / 100) * plotHeight;
-        
-        point.style.left = x + 'px';
-        point.style.top = y + 'px';
-        
-        // Tooltip
-        point.addEventListener('mouseenter', (e) => {
-          const tooltip = document.createElement('div');
-          tooltip.className = 'chart-tooltip';
-          tooltip.innerHTML = `
-            Attempt ${index + 1}<br>
-            ${result.digits}-digit number<br>
-            Accuracy: ${result.accuracy.toFixed(1)}%<br>
-            Target: ${result.composite}<br>
-            Your answer: ${result.userFactors.join(' × ')} = ${result.userProduct}
-          `;
-          tooltip.style.left = (e.pageX + 10) + 'px';
-          tooltip.style.top = (e.pageY - 10) + 'px';
-          document.body.appendChild(tooltip);
-          
-          point.addEventListener('mouseleave', () => {
-            document.body.removeChild(tooltip);
-          }, { once: true });
-        });
-        
-        plotArea.appendChild(point);
+      if (!results.length) { chartContainer.style.display = 'none'; return; }
+      chartContainer.style.display = 'block';
+      chartArea.innerHTML = '';
+      chartLabels.innerHTML = '';
+      const rates = results.map((_, i) => {
+        const correct = results.slice(0, i + 1).filter(r => r.success).length;
+        return (correct / (i + 1)) * 100;
+      });
+      rates.forEach((rate, idx) => {
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        bar.style.height = `${rate * 1}px`;
+        bar.style.backgroundColor = results[idx].success ? 'var(--success)' : 'var(--error)';
+        bar.title = `Attempt ${idx + 1}: ${rate.toFixed(1)} %`;
+        chartArea.appendChild(bar);
+        const label = document.createElement('span');
+        label.textContent = idx + 1;
+        label.className = 'chart-label';
+        chartLabels.appendChild(label);
       });
     }
 
-    let currentChallenge = null;
-    
-    document.getElementById('summonBtn').addEventListener('click', () => {
-      const difficulty = parseInt(document.getElementById('difficulty').value);
-      currentChallenge = generateComposite(difficulty);
-      
-      document.getElementById('numberDisplay').innerHTML = 
-        `<strong>Number to Factor:</strong> ${currentChallenge.composite} 
-         <span style="color: #666;">(${currentChallenge.digits}-digit)</span>`;
-      
-      document.getElementById('factors').disabled = false;
-      document.getElementById('checkBtn').disabled = false;
-      document.getElementById('result').textContent = '';
-      document.getElementById('errorInfo').textContent = '';
-      document.getElementById('factors').value = '';
-      document.getElementById('factors').focus();
-    });
-
-    document.getElementById('checkBtn').addEventListener('click', () => {
-      if (!currentChallenge) return;
-      
-      const inputStr = document.getElementById('factors').value.trim();
-      if (!inputStr) {
-        alert('Please enter prime factors!');
-        return;
-      }
-      
-      const userFactors = inputStr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0);
-      
-      if (userFactors.length === 0) {
-        alert('Please enter valid numbers!');
-        return;
-      }
-      
-      const userProduct = userFactors.reduce((a, b) => a * b, 1);
-      const accuracy = calculateAccuracy(userFactors, currentChallenge.factors, currentChallenge.composite);
-      
-      // Store result
-      sessionResults.push({
-        composite: currentChallenge.composite,
-        correctFactors: currentChallenge.factors.slice(),
-        userFactors: userFactors.slice(),
-        userProduct: userProduct,
-        accuracy: accuracy,
-        digits: currentChallenge.digits,
-        timestamp: new Date().toISOString()
-      });
-      
-      // Display result
-      if (accuracy === 100) {
-        document.getElementById('result').innerHTML = '<span class="success">✅ Perfect! Exceptional performance!</span>';
-      } else if (accuracy > 50) {
-        document.getElementById('result').innerHTML = `<span style="color: #ffa500;">⚡ Close! ${accuracy.toFixed(1)}% accuracy</span>`;
-      } else {
-        document.getElementById('result').innerHTML = `<span class="error">❌ ${accuracy.toFixed(1)}% accuracy</span>`;
-      }
-      
-      const error = Math.abs(userProduct - currentChallenge.composite);
-      document.getElementById('errorInfo').innerHTML = `
-        <strong>Correct:</strong> ${currentChallenge.factors.join(' × ')} = ${currentChallenge.composite}<br>
-        <strong>Your answer:</strong> ${userFactors.join(' × ')} = ${userProduct} (deviation: ${error})
+    /* ---------- Score ---------- */
+    function updateScore() {
+      const total = results.length;
+      const correct = results.filter(r => r.success).length;
+      const rate = total ? (correct / total) * 100 : 0;
+      const avgError = total ? (results.reduce((s, r) => s + (r.error || 0), 0) / total).toFixed(1) : 0;
+      score.innerHTML = `
+        <strong>Attempts:</strong> ${total}<br>
+        <strong>Correct:</strong> ${correct}<br>
+        <strong>Success Rate:</strong> ${rate.toFixed(1)} %<br>
+        <strong>Avg. Error:</strong> ${avgError}<br>
+        <strong>Baseline (≥5 digits):</strong> random chance ≈ 0.001 %
       `;
-      
-      updateStats();
+      localStorage.setItem('niceResults', JSON.stringify(results));
       renderChart();
-      
-      document.getElementById('shareBtn').style.display = 'block';
+      if (total) shareBtn.style.display = 'inline-block';
+    }
+
+    /* ---------- UI Events ---------- */
+    summonBtn.addEventListener('click', () => {
+      const d = parseInt(difficulty.value);
+      current = generateComposite(d);
+      numberDisplay.textContent = current.composite;
+      challengeArea.style.display = 'block';
+      factorsInput.value = '';
+      factorsInput.disabled = false;
+      checkBtn.disabled = false;
+      result.textContent = '';
+      errorInfo.textContent = '';
+      hintText.textContent = '';
+      startTimer();
+      factorsInput.focus();
     });
 
-    document.getElementById('shareBtn').addEventListener('click', () => {
-      const summary = `NICE Prime Challenge Session Results:\n` +
-        `Total attempts: ${sessionResults.length}\n` +
-        `Perfect scores: ${sessionResults.filter(r => r.accuracy === 100).length}\n` +
-        `Average accuracy: ${(sessionResults.reduce((sum, r) => sum + r.accuracy, 0) / sessionResults.length).toFixed(1)}%\n` +
-        `Best accuracy: ${Math.max(...sessionResults.map(r => r.accuracy)).toFixed(1)}%\n\n` +
-        `Results by difficulty:\n` +
-        [2,3,4,5,6,7,8].map(d => {
-          const attempts = sessionResults.filter(r => r.digits === d);
-          if (attempts.length === 0) return null;
-          const avg = attempts.reduce((sum, r) => sum + r.accuracy, 0) / attempts.length;
-          return `${d}-digit: ${attempts.length} attempts, ${avg.toFixed(1)}% avg`;
-        }).filter(Boolean).join('\n');
-      
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(summary).then(() => {
-          alert('Results copied to clipboard!');
-        }).catch(() => {
-          alert('Results:\n' + summary);
-        });
+    checkBtn.addEventListener('click', () => {
+      if (!current) return;
+      const userFactors = factorsInput.value.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0);
+      const product = userFactors.reduce((a, b) => a * b, 1);
+      const success = userFactors.length === 2 && product === current.composite && userFactors.every(isPrime);
+      const error = Math.abs(product - current.composite);
+      const time = timer.textContent;
+      clearInterval(timerInterval);
+
+      results.push({
+        composite: current.composite,
+        success,
+        error,
+        time,
+        digits: current.composite.toString().length,
+        userFactors,
+        correctFactors: current.factors
+      });
+      updateScore();
+
+      if (success) {
+        result.innerHTML = '<span class="success">✅ Correct!</span>';
       } else {
-        alert('Results:\n' + summary);
+        result.innerHTML = '<span class="error">❌ Incorrect.</span>';
+        errorInfo.textContent = `Correct factors: ${current.factors.join(' × ')} = ${current.composite}`;
       }
+      factorsInput.disabled = true;
+      checkBtn.disabled = true;
     });
 
-    // Allow Enter key to submit
-    document.getElementById('factors').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !document.getElementById('checkBtn').disabled) {
-        document.getElementById('checkBtn').click();
-      }
+    hintBtn.addEventListener('click', () => {
+      if (!current) return;
+      const [a, b] = current.factors;
+      // Reveal the smaller factor
+      hintText.textContent = `Hint: the smaller factor is ${Math.min(a, b)}`;
     });
+
+    shareBtn.addEventListener('click', () => {
+      const summary = `NICE Prime Challenge Results:
+Attempts: ${results.length}
+Correct: ${results.filter(r => r.success).length}
+Success rate: ${((results.filter(r => r.success).length / results.length) * 100).toFixed(1)} %`;
+      navigator.clipboard.writeText(summary).then(() => alert('Copied to clipboard!')).catch(() => alert(summary));
+    });
+
+    factorsInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !checkBtn.disabled) checkBtn.click();
+    });
+
+    /* ---------- Init ---------- */
+    updateScore();
   </script>
 </body>
 </html>
